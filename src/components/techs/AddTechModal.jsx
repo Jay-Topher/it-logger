@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import M from "materialize-css/dist/js/materialize.min.js";
+import { addTech } from "../../actions/techActions";
 
-const AddTechModal = () => {
+const AddTechModal = ({ addTech }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
@@ -9,11 +12,17 @@ const AddTechModal = () => {
     if (firstName === "" || lastName === "") {
       M.toast({ html: "Please enter the first and last name" });
     } else {
-      console.log(firstName, lastName);
+      // add techs
+      const newTech = {
+        firstName,
+        lastName
+      };
+      addTech(newTech);
 
       // clear fields
       setFirstName("");
       setLastName("");
+      M.toast({ html: `${firstName} added successfully` });
     }
   };
   return (
@@ -47,18 +56,22 @@ const AddTechModal = () => {
             </label>
           </div>
         </div>
-      <div className="modal-footer">
-        <a
-          href="#!"
-          className="modal-close waves-effect waves-light btn blue"
-          onClick={onSubmit}
-        >
-          Enter
-        </a>
+        <div className="modal-footer">
+          <a
+            href="#!"
+            className="modal-close waves-effect waves-light btn blue"
+            onClick={onSubmit}
+          >
+            Enter
+          </a>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
 
-export default AddTechModal;
+AddTechModal.propTypes = {
+  addTech: PropTypes.func.isRequired
+};
+
+export default connect(null, { addTech })(AddTechModal);
